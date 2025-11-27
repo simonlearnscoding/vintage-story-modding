@@ -40,3 +40,30 @@ class PlayerService:
             session.commit()
             session.refresh(log)
             return log
+    
+    @staticmethod
+    def get_player_logs(uid: str) -> list[UserLog]:
+        with Session() as session:
+            return session.execute(select(UserLog).where(UserLog.uid == uid).order_by(UserLog.id.desc())).scalars().all()
+    
+    @staticmethod
+    def update_user_log_with_leave_time(uid: str, left_at: str) -> UserLog | None:
+        with Session() as session:
+            # Find the most recent log for this user with no leftAt time
+            log = session.execute(
+                select(UserLog)
+                .where(UserLog.uid == uid, UserLog.leftAt.is_(None))
+                .order_by(UserLog.id.desc())
+            ).scalar_one_or_none()
+            
+            if log:
+                log.leftAt = left_at
+                session.commit()
+                session.refresh(log)
+                return log
+            return None
+    
+    @staticmethod
+    def get_all_player_logs() -> list[UserLog]:
+        with Session() as session:
+            return session.execute(select(UserLog).order_by(UserLog.id.desc())).scalars().all()
