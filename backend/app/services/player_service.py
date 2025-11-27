@@ -40,3 +40,13 @@ class PlayerService:
             session.commit()
             session.refresh(log)
             return log
+    
+    @staticmethod
+    def get_player_logs(uid: str) -> list[UserLog]:
+        with Session() as session:
+            return session.execute(select(UserLog).where(UserLog.uid == uid).order_by(UserLog.id.desc())).scalars().all()
+    
+    @staticmethod
+    def get_all_player_logs() -> list[UserLog]:
+        with Session() as session:
+            return session.execute(select(UserLog).order_by(UserLog.id.desc())).scalars().all()
