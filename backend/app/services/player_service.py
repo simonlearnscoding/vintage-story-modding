@@ -34,8 +34,17 @@ class PlayerService:
             return session.execute(select(Player)).scalars().all()
     
     @staticmethod
-    def create_user_log(uid: str, joined_at: str, left_at: str = None) -> UserLog:
+    def create_user_log(uid: str, joined_at: str, left_at: str | None = None) -> UserLog:
         with Session() as session:
+            # Delete any existing log with same uid and no leftAt
+            existing_log = session.execute(
+                select(UserLog)
+                .where(UserLog.uid == uid, UserLog.leftAt.is_(None))
+            ).scalar_one_or_none()
+            
+            if existing_log:
+                session.delete(existing_log)
+            
             log = UserLog(uid=uid, joinedAt=joined_at, leftAt=left_at)
             session.add(log)
             session.commit()
