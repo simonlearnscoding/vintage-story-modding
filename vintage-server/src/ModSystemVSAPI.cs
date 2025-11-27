@@ -39,7 +39,7 @@ public class PlayerEvents : ModSystem
 
         string json = JsonSerializer.Serialize(payload);
         var content = new StringContent(json, Encoding.UTF8, "application/json");
-        string url = "http://fast-api:8080/join";
+        string url = "http:localhost:8000/platers/join";
         HttpResponseMessage resp = await httpClient.PostAsync(url, content);
 
     }
@@ -53,7 +53,7 @@ public class PlayerEvents : ModSystem
 
         string json = JsonSerializer.Serialize(payload);
         var content = new StringContent(json, Encoding.UTF8, "application/json");
-        string url = "http://fast-api:8080/disconnect";
+        string url = "http:localhost:8080/players/leave";
         HttpResponseMessage resp = await httpClient.PostAsync(url, content);
 
     }

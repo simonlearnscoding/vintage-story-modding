@@ -20,6 +20,15 @@ async def create_player(player: PlayerCreate):
         raise HTTPException(status_code=500, detail=str(e))
 
 
+@router.get("/logs", response_model=list[UserLogResponse])
+async def get_all_player_logs():
+    try:
+        logs = PlayerService.get_all_player_logs()
+        return logs
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
 @router.get("/{uid}/logs", response_model=list[UserLogResponse])
 async def get_player_logs(uid: str):
     try:
@@ -80,13 +89,3 @@ async def leave_player(leave_request: PlayerLeaveRequest):
         raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-
-
-@router.get("/logs", response_model=list[UserLogResponse])
-async def get_all_player_logs():
-    try:
-        logs = PlayerService.get_all_player_logs()
-        return logs
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-

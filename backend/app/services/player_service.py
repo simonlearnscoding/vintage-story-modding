@@ -1,6 +1,7 @@
 from sqlalchemy import select
 from app.models.database import Player, UserLog
 from app.models.database_connection import Session
+from typing import List, Dict
 
 class PlayerService:
     @staticmethod
@@ -42,9 +43,25 @@ class PlayerService:
             return log
     
     @staticmethod
-    def get_player_logs(uid: str) -> list[UserLog]:
+    def get_player_logs(uid: str) -> list[dict]:
         with Session() as session:
-            return session.execute(select(UserLog).where(UserLog.uid == uid).order_by(UserLog.id.desc())).scalars().all()
+            result = session.execute(
+                select(UserLog, Player.name)
+                .join(Player, UserLog.uid == Player.uid)
+                .where(UserLog.uid == uid)
+                .order_by(UserLog.id.desc())
+            ).all()
+            
+            return [
+                {
+                    "id": log.id,
+                    "uid": log.uid,
+                    "name": name,
+                    "joinedAt": log.joinedAt,
+                    "leftAt": log.leftAt
+                }
+                for log, name in result
+            ]
     
     @staticmethod
     def update_user_log_with_leave_time(uid: str, left_at: str) -> UserLog | None:
@@ -64,6 +81,21 @@ class PlayerService:
             return None
     
     @staticmethod
-    def get_all_player_logs() -> list[UserLog]:
+    def get_all_player_logs() -> list[dict]:
         with Session() as session:
-            return session.execute(select(UserLog).order_by(UserLog.id.desc())).scalars().all()
+            result = session.execute(
+                select(UserLog, Player.name)
+                .join(Player, UserLog.uid == Player.uid)
+                .order_by(UserLog.id.desc())
+            ).all()
+            
+            return [
+                {
+                    "id": log.id,
+                    "uid": log.uid,
+                    "name": name,
+                    "joinedAt": log.joinedAt,
+                    "leftAt": log.leftAt
+                }
+                for log, name in result
+            ]

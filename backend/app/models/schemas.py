@@ -42,6 +42,7 @@ class UserLogCreate(BaseModel):
 class UserLogResponse(BaseModel):
     id: int
     uid: str
+    name: str
     joinedAt: str
     leftAt: Optional[str] = None
 

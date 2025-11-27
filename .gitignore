@@ -6,6 +6,7 @@ __pycache__/
 *.so
 .Python
 build/
+frontend/node_modules/*
 develop-eggs/
 dist/
 downloads/
