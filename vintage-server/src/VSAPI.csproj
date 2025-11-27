@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <AssemblyName>VSAPI</AssemblyName>
+    <RootNamespace>VSAPI</RootNamespace>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Pfade ANPASSEN! -->
+    <Reference Include="VintagestoryAPI">
+      <HintPath>C:\Users\stp34852\AppData\Roaming\Vintagestory\VintagestoryAPI.dll</HintPath>
+    </Reference>
+    <Reference Include="VintagestoryLib">
+      <HintPath>C:\Users\stp34852\AppData\Roaming\Vintagestory\VintagestoryLib.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <PropertyGroup>
+    <!-- Ausgabe direkt in den Mod-Ordner schreiben (optional aber praktisch) -->
+    <OutputPath>..\</OutputPath>
+  </PropertyGroup>
+</Project>

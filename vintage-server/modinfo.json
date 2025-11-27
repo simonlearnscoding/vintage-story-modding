@@ -1,0 +1,12 @@
+{
+  "type": "code",
+  "name": "VSAPI",
+  "modid": "vsapi",
+  "version": "1.0.0",
+  "description": "Basic API mod that sends Player Join and Leave methods to api ",
+  "website": "",
+  "authors": [ "Pasquotcho" ],
+  "dependency": {
+    "game": "1.21.0"
+  }
+}
