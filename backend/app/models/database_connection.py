@@ -3,12 +3,11 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from app.models.database import Base
 
-DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///vintagestorydata.db")
+# we can hardcode this for now because it's just local
+DATABASE_URL = os.getenv("postgresql://vsuser:vspassword@localhost:5433/vintagestory")
 
-if DATABASE_URL.startswith("postgresql"):
-    engine = create_engine(DATABASE_URL, echo=True)
-else:
-    engine = create_engine(DATABASE_URL, echo=True, connect_args={"check_same_thread": False})
+engine = create_engine(DATABASE_URL, echo=True)
 
 Base.metadata.create_all(engine)
 Session = sessionmaker(bind=engine)
+
