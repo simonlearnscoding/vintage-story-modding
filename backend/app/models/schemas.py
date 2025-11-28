@@ -8,18 +8,8 @@ class PlayerCreate(BaseModel):
 
 class PlayerJoinRequest(BaseModel):
     PlayerUID: str
-    RoleCode: str
-    PermaPrivileges: list
-    DeniedPrivileges: list
-    PlayerGroupMemberShips: dict
-    AllowInvite: bool
     LastKnownPlayername: str
-    CustomPlayerData: dict
-    ExtraLandClaimAllowance: int
-    ExtraLandClaimAreas: int
-    FirstJoinDate: str
     LastJoinDate: str
-    LastCharacterSelectionDate: str
 
 class PlayerLeaveRequest(BaseModel):
     uid: str
