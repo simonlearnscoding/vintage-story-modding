@@ -11,7 +11,6 @@ interface UserLog {
 
 function formatRelativeDate(dateString: string): string {
   const [month, day, year] = dateString.split(" ")[0].split("/");
-  const [time] = dateString.split(" ")[1].split(":");
   const date = new Date(`${year}-${month}-${day} ${dateString.split(" ")[1]}`);
 
   const today = new Date();
