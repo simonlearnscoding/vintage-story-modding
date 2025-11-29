@@ -51,15 +51,13 @@ services:
     container_name: vintage_frontend
     environment:
       VITE_API_URL: /api
-    ports:
-      - "4321:80"
     depends_on:
       - backend
     networks:
       - vintage_network
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:4321"]
+      test: ["CMD", "curl", "-f", "http://localhost:80"]
       interval: 30s
       timeout: 10s
       retries: 3
