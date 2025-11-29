@@ -50,14 +50,14 @@ services:
       dockerfile: Dockerfile
     container_name: vintage_frontend
     ports:
-      - "80:80"
+      - "4321:80"
     depends_on:
       - backend
     networks:
       - vintage_network
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:80"]
+      test: ["CMD", "curl", "-f", "http://localhost:4321"]
       interval: 30s
       timeout: 10s
       retries: 3
