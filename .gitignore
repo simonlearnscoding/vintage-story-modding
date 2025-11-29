@@ -45,6 +45,8 @@ Thumbs.db
 # Environment variables
 .env.local
 .env.production
+.env
+frontend/.env
 
 # Logs
 *.log
