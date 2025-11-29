@@ -58,6 +58,8 @@ function VintageLogDashboard() {
     queryKey: ["playerLogs"],
     queryFn: async () => {
       const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:8000";
+      console.log("this is the api", apiUrl);
+      console.log("from .env files", import.meta.env.VITE_API_URL);
       const response = await fetch(`${apiUrl}/players/logs`);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
