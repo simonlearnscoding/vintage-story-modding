@@ -41,8 +41,8 @@ function VintageLogDashboard() {
   });
 
   const {
-    isLoading: isLoadingPlayers,
-    error: errorPlayers,
+    isLoading: _isLoadingPlayers,
+    error: _errorPlayers,
     data: players = [],
   } = useQuery({
     queryKey: ["players"],
@@ -57,9 +57,9 @@ function VintageLogDashboard() {
     refetchInterval: 30000, // Refetch every 30 seconds
   });
 
-  if (isLoading || isLoadingPlayers) {
+  if (isLoading || _isLoadingPlayers) {
     return (
-      <div className="min-h-screen bg-gray-50 py-8">
+      <div className="min-h-screen bg-base-100 py-8">
         <div className="max-w-6xl mx-auto px-4">
           <div className="text-center">
             <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
@@ -70,13 +70,13 @@ function VintageLogDashboard() {
     );
   }
 
-  if (error || errorPlayers) {
+  if (error || _errorPlayers) {
     return (
-      <div className="min-h-screen bg-gray-50 py-8">
+      <div className="min-h-screen bg-base-100 py-8">
         <div className="max-w-6xl mx-auto px-4">
           <div className="text-center">
             <p className="text-red-600">
-              Error: {error?.message || errorPlayers?.message}
+              Error: {error?.message || _errorPlayers?.message}
             </p>
           </div>
         </div>
@@ -99,11 +99,15 @@ function VintageLogDashboard() {
         <div className=" flex flex-1 w-full flex-col gap-3  ">
           <div className="text-xl ">Online Players</div>
           <div className="h-[1.3px] w-full bg-gray-500" />
-          {players
-            .filter((player) => player.isOnline)
-            .map((player) => (
-              <PlayerCard key={player.uid} player={player} />
-            ))}
+          {players.filter((player) => player.isOnline).length > 0 ? (
+            players
+              .filter((player) => player.isOnline)
+              .map((player) => <PlayerCard key={player.uid} player={player} />)
+          ) : (
+            <p className="text-gray-500 text-center py-4">
+              No players are currently online
+            </p>
+          )}
 
           <div className="text-xl">Offline Players</div>
           <div className="h-[1.3px] w-full bg-gray-500" />
