@@ -58,7 +58,7 @@ function VintageLogDashboard() {
     refetchInterval: 30000, // Refetch every 30 seconds
   });
 
-  if (isLoading) {
+  if (isLoading || isLoadingPlayers) {
     return (
       <div className="min-h-screen bg-gray-50 py-8">
         <div className="max-w-6xl mx-auto px-4">
@@ -71,12 +71,14 @@ function VintageLogDashboard() {
     );
   }
 
-  if (error) {
+  if (error || errorPlayers) {
     return (
       <div className="min-h-screen bg-gray-50 py-8">
         <div className="max-w-6xl mx-auto px-4">
           <div className="text-center">
-            <p className="text-red-600">Error: {error.message}</p>
+            <p className="text-red-600">
+              Error: {error?.message || errorPlayers?.message}
+            </p>
           </div>
         </div>
       </div>
