@@ -39,21 +39,21 @@ async def get_player_logs(uid: str):
         raise HTTPException(status_code=500, detail=str(e))
 
 
+@router.get("/", response_model=list[PlayerDetailsResponse])
+async def get_all_players():
+    try:
+        players = PlayerService.get_all_player_details()
+        return players
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
 @router.get("/{uid}", response_model=PlayerResponse)
 async def get_player(uid: str):
     player = PlayerService.get_player(uid)
     if not player:
         raise HTTPException(status_code=404, detail="Player not found")
     return player
-
-
-@router.get("/", response_model=list[PlayerResponse])
-async def get_all_players():
-    try:
-        players = PlayerService.get_all_players()
-        return players
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
 
 
 @router.post("/details", response_model=PlayerDetailsResponse)
@@ -70,6 +70,7 @@ async def get_player_details(request: dict):
         raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
 
 @router.post("/join", response_model=PlayerResponse)
 async def join_player(join_request: PlayerJoinRequest):
