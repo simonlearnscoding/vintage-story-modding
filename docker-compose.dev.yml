@@ -1,24 +1,109 @@
-version: '3.8'
-
 services:
+  # PostgreSQL Database
   postgres:
     image: postgres:15
+    container_name: vintage_postgres
     environment:
       POSTGRES_DB: vintagestory
       POSTGRES_USER: vsuser
       POSTGRES_PASSWORD: vspassword
     ports:
-      - "5433:5432"
+      - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - vintage_network
+    restart: unless-stopped
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U vsuser -d vintagestory"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Backend API
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: vintage_backend
+    environment:
+      DATABASE_URL: postgresql://vsuser:vspassword@postgres:5432/vintagestory
+      HOST: 0.0.0.0
+      PORT: 8000
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - vintage_network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Frontend
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: vintage_frontend
+    environment:
+      VITE_API_URL: /api
+    ports:
+      - "4321:80"
+    depends_on:
+      - backend
+    networks:
+      - vintage_network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  vintage-story:
+    container_name: vintagestory
+    image: pepecitron/vintagestory-server
+    restart: unless-stopped
+    stdin_open: true
+    tty: true
+
+    environment:
+      SERVER_BRANCH: "stable"
+      SERVER_VERSION: "1.21.5"
+
+      SERVER_NAME: "Vintage Fun"
+      SERVER_DESCRIPTION: "Vintage Story Server"
+      SERVER_PORT: "42420"
+      WORLDCONFIG_CAVE_INS: "on"
+      SERVER_PUBLIC: "false"
+      SERVER_PASSWORD: "waterisfuckingdelicious"
+      SERVER_MAX_CLIENTS: "8"
+      SERVER_SERVER_LANGUAGE: "de"
+      WORLDCONFIG_PLAYERLIVES: 20
+      WORLDCONFIG_TEMPORAL_STORMS: "veryrare"
+      WORLDCONFIG_PLAYER_HUNGER_SPEED: 0.75
+      WORLDCONFIG_SEALEVEL: 115
+      UID: "1000"
+      GID: "1000"
+
+    ports:
+      - "42420:42420"
+    depends_on:
+      - backend
+    volumes:
+      - ./vintage-server/data:/data/server-file
 
 
 volumes:
   postgres_data:
+    driver: local
 
-
+networks:
+  vintage_network:
+    driver: bridge

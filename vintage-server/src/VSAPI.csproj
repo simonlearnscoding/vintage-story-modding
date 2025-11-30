@@ -9,17 +9,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <!-- Pfade ANPASSEN! -->
     <Reference Include="VintagestoryAPI">
-      <HintPath>C:\Users\stp34852\AppData\Roaming\Vintagestory\VintagestoryAPI.dll</HintPath>
+      <HintPath>C:\Users\Pascal\AppData\Roaming\Vintagestory\VintagestoryAPI.dll</HintPath>
     </Reference>
     <Reference Include="VintagestoryLib">
-      <HintPath>C:\Users\stp34852\AppData\Roaming\Vintagestory\VintagestoryLib.dll</HintPath>
+      <HintPath>C:\Users\Pascal\AppData\Roaming\Vintagestory\VintagestoryLib.dll</HintPath>
     </Reference>
   </ItemGroup>
 
   <PropertyGroup>
-    <!-- Ausgabe direkt in den Mod-Ordner schreiben (optional aber praktisch) -->
-    <OutputPath>..\</OutputPath>
+    <OutputPath>./</OutputPath>
   </PropertyGroup>
 </Project>
