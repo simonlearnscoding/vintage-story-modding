@@ -2,6 +2,7 @@ from sqlalchemy import select
 from app.models.database import Player, UserLog
 from app.models.database_connection import Session
 from typing import List, Dict
+from datetime import datetime
 
 class PlayerService:
     @staticmethod
@@ -70,8 +71,63 @@ class PlayerService:
                     "leftAt": log.leftAt
                 }
                 for log, name in result
-            ]
-    
+ ]
+
+    @staticmethod
+    def get_player_details(uid: str) -> dict | None:
+        with Session() as session:
+            player = session.execute(
+                select(Player).where(Player.uid == uid)
+            ).scalar_one_or_none()
+
+            if not player:
+                return None
+
+            active_log = session.execute(
+                select(UserLog)
+                .where(UserLog.uid == uid, UserLog.leftAt.is_(None))
+                .order_by(UserLog.id.desc())
+            ).scalar_one_or_none()
+
+            last_log = session.execute(
+                select(UserLog)
+                .where(UserLog.uid == uid)
+                .order_by(UserLog.id.desc())
+            ).scalars().first()
+
+            is_online = active_log is not None
+            online_since = None
+            last_online = None
+
+            if is_online and active_log:
+                join_time = datetime.strptime(active_log.joinedAt, "%m/%d/%Y %H:%M")
+                now = datetime.now()
+
+                duration_seconds = (now - join_time).total_seconds()
+                if duration_seconds < 0:
+                    duration_seconds = 0
+
+                hours = int(duration_seconds // 3600)
+                minutes = int((duration_seconds % 3600) // 60)
+                seconds = int(duration_seconds % 60)
+
+                if seconds > 0:
+                    online_since = f"{hours}h {minutes}m {seconds}s"
+                else:
+                    online_since = f"{hours}h {minutes}m"
+
+            elif last_log and last_log.leftAt:
+                last_online = last_log.leftAt
+
+            return {
+                "name": player.name,
+                "uid": player.uid,
+                "isOnline": is_online,
+                "onlineSince": online_since,
+                "lastOnline": last_online
+            }
+
+
     @staticmethod
     def update_user_log_with_leave_time(uid: str, left_at: str) -> UserLog | None:
         with Session() as session:

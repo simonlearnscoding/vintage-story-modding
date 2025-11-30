@@ -17,9 +17,10 @@ services:
     restart: unless-stopped
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U vsuser -d vintagestory"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
 
   # Backend API
   backend:
@@ -28,6 +29,7 @@ services:
       dockerfile: Dockerfile
     container_name: vintage_backend
     environment:
+      TZ: Europe/Berlin
       DATABASE_URL: postgresql://vsuser:vspassword@postgres:5432/vintagestory
       HOST: 0.0.0.0
       PORT: 8000

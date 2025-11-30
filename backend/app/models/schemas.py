@@ -38,3 +38,10 @@ class UserLogResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+class PlayerDetailsResponse(BaseModel):
+    name: str
+    uid: str
+    isOnline: bool
+    onlineSince: Optional[str] = None
+    lastOnline: Optional[str] = None
