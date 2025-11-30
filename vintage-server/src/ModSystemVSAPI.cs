@@ -1,20 +1,25 @@
-using Vintagestory.API.Common;
-using System.Net.Http;
 using System.Text;
 using System.Text.Json;
+using Vintagestory.API.Common;
 using Vintagestory.API.Server;
+
+namespace VSAPI;
 
 public class PlayerEvents : ModSystem
 {
-    private ICoreServerAPI sapi;
-    private static readonly HttpClient httpClient = new HttpClient();
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
+    private ICoreServerAPI _sapi;
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
     
-    // API-URL-Placeholder 
-    private readonly string apiBaseUrl = "http://localhost:8000";
+    private static readonly HttpClient HttpClient = new HttpClient();
 
+    private const bool Prod = false;
+    // API-URL-Placeholder - Later build something to get the prod state somewhere
+    private readonly string _apiBaseUrl = Prod ? "https://vsm.pasquotcho.com:8000" : "http://host.docker.internal:8000";
+        
     public override void StartServerSide(ICoreServerAPI api)
     {
-        sapi = api;
+        _sapi = api;
         api.Event.PlayerJoin += OnPlayerJoin;
         api.Event.PlayerLeave += OnPlayerLeave;
         api.Event.PlayerDisconnect += OnPlayerLeave;
@@ -22,67 +27,67 @@ public class PlayerEvents : ModSystem
 
     private void OnPlayerJoin(IServerPlayer player)
     {
-        sapi.Logger.Notification($"[Join] {player.PlayerName} hat den Server betreten.");
+        _sapi.Logger.Notification($"[Join] {player.PlayerName} hat den Server betreten.");
         _ = SendJoinToWebhook(player);
     }
 
     private void OnPlayerLeave(IServerPlayer player)
     {
-        sapi.Logger.Notification($"[Leave] {player.PlayerName} hat den Server verlassen.");
+        _sapi.Logger.Notification($"[Leave] {player.PlayerName} hat den Server verlassen.");
         _ = SendLeaveToWebhook(player);
     }
     
-    private async System.Threading.Tasks.Task SendJoinToWebhook(IServerPlayer player)
+    private async Task SendJoinToWebhook(IServerPlayer player)
     {
         var payload = new
         {
+            // ReSharper disable once RedundantAnonymousTypePropertyName
             PlayerUID = player.PlayerUID,
             LastKnownPlayername = player.PlayerName,
-            LastJoinDate = System.DateTime.UtcNow.ToString("MM/dd/yyyy HH:mm")
+            LastJoinDate = DateTime.UtcNow.ToString("MM/dd/yyyy HH:mm")
         };
 
         string json = JsonSerializer.Serialize(payload);
         var content = new StringContent(json, Encoding.UTF8, "application/json");
-        string url = $"{apiBaseUrl}/players/join";
+        string url = $"{_apiBaseUrl}/players/join";
         
         try 
         {
-            HttpResponseMessage resp = await httpClient.PostAsync(url, content);
+            HttpResponseMessage resp = await HttpClient.PostAsync(url, content);
             if (!resp.IsSuccessStatusCode)
             {
-                sapi.Logger.Error($"Failed to send join event: {resp.StatusCode}");
+                _sapi.Logger.Error($"Failed to send join event: {resp.StatusCode}");
             }
         }
         catch (Exception ex)
         {
-            sapi.Logger.Error($"Error sending join event: {ex.Message}");
+            _sapi.Logger.Error($"Error sending join event: {ex.Message}");
         }
     }
     
-    private async System.Threading.Tasks.Task SendLeaveToWebhook(IServerPlayer player)
+    private async Task SendLeaveToWebhook(IServerPlayer player)
     {
         var payload = new
         {
             uid = player.PlayerUID,
-            leftAt = System.DateTime.UtcNow.ToString("MM/dd/yyyy HH:mm")
+            leftAt = DateTime.UtcNow.ToString("MM/dd/yyyy HH:mm")
         };
 
         string json = JsonSerializer.Serialize(payload);
         var content = new StringContent(json, Encoding.UTF8, "application/json");
-        string url = $"{apiBaseUrl}/players/leave";
+        string url = $"{_apiBaseUrl}/players/leave";
         
         try 
         {
-            HttpResponseMessage resp = await httpClient.PostAsync(url, content);
+            HttpResponseMessage resp = await HttpClient.PostAsync(url, content);
             if (!resp.IsSuccessStatusCode)
             {
-                sapi.Logger.Error($"Failed to send leave event: {resp.StatusCode}");
+                _sapi.Logger.Error($"Failed to send leave event: {resp.StatusCode}");
             }
         }
         catch (Exception ex)
         {
-            sapi.Logger.Error($"Error sending leave event: {ex.Message}");
+            _sapi.Logger.Error($"Error sending leave event: {ex.Message}");
         }
     }
 }
-    

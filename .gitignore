@@ -33,6 +33,7 @@ ENV/
 .idea/
 *.swp
 *.swo
+/vintage-server/src/Folder.DotSettings.user
 
 # OS
 .DS_Store
@@ -50,3 +51,8 @@ frontend/.env
 
 # Logs
 *.log
+
+# Vintagestory Server and Mod Files
+/vintage-server/data/
+/vintage-server/src/net8.0/
+/vintage-server/src/obj/
