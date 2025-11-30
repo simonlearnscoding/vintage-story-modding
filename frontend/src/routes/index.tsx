@@ -38,7 +38,6 @@ function VintageLogDashboard() {
       }
       return response.json() as Promise<UserLog[]>;
     },
-    refetchInterval: 30000, // Refetch every 30 seconds
   });
 
   const {
@@ -49,7 +48,7 @@ function VintageLogDashboard() {
     queryKey: ["players"],
     queryFn: async () => {
       const apiUrl = import.meta.env.VITE_API_URL || "/api";
-      const response = await fetch(apiUrl + "/players");
+      const response = await fetch(apiUrl + "/players/");
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
