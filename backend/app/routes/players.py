@@ -5,6 +5,7 @@ from app.models.schemas import (
     UserLogResponse,
     PlayerJoinRequest,
     PlayerLeaveRequest,
+    PlayerDetailsResponse,
 )
 from app.services.player_service import PlayerService
 
@@ -54,6 +55,21 @@ async def get_all_players():
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+
+@router.post("/details", response_model=PlayerDetailsResponse)
+async def get_player_details(request: dict):
+    uid = request.get("uid")
+    if not uid:
+        raise HTTPException(status_code=400, detail="uid is required")
+    try:
+        player_details = PlayerService.get_player_details(uid)
+        if not player_details:
+            raise HTTPException(status_code=404, detail="Player not found")
+        return player_details
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 @router.post("/join", response_model=PlayerResponse)
 async def join_player(join_request: PlayerJoinRequest):

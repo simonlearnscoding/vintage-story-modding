@@ -26,6 +26,7 @@ services:
       dockerfile: Dockerfile
     container_name: vintage_backend
     environment:
+      TZ: Europe/Berlin
       DATABASE_URL: postgresql://vsuser:vspassword@postgres:5432/vintagestory
       HOST: 0.0.0.0
       PORT: 8000

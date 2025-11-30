@@ -15,7 +15,7 @@ public class PlayerEvents : ModSystem
 
     private const bool Prod = false;
     // API-URL-Placeholder - Later build something to get the prod state somewhere
-    private readonly string _apiBaseUrl = Prod ? "https://vsm.pasquotcho.com:8000" : "http://host.docker.internal:8000";
+    private readonly string _apiBaseUrl = Prod ? "https://vsm.pasquotcho.com/api" : "http://host.docker.internal:8000";
         
     public override void StartServerSide(ICoreServerAPI api)
     {
@@ -44,7 +44,7 @@ public class PlayerEvents : ModSystem
             // ReSharper disable once RedundantAnonymousTypePropertyName
             PlayerUID = player.PlayerUID,
             LastKnownPlayername = player.PlayerName,
-            LastJoinDate = DateTime.UtcNow.ToString("MM/dd/yyyy HH:mm")
+            LastJoinDate = DateTime.Now.ToString("MM/dd/yyyy HH:mm")
         };
 
         string json = JsonSerializer.Serialize(payload);
@@ -70,7 +70,7 @@ public class PlayerEvents : ModSystem
         var payload = new
         {
             uid = player.PlayerUID,
-            leftAt = DateTime.UtcNow.ToString("MM/dd/yyyy HH:mm")
+            leftAt = DateTime.Now.ToString("MM/dd/yyyy HH:mm")
         };
 
         string json = JsonSerializer.Serialize(payload);

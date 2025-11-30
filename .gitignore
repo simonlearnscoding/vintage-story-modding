@@ -28,6 +28,9 @@ venv/
 env/
 ENV/
 
+# TMP
+/tmp/
+
 # IDE
 .vscode/
 .idea/
