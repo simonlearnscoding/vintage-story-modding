@@ -44,7 +44,7 @@ public class PlayerEvents : ModSystem
             // ReSharper disable once RedundantAnonymousTypePropertyName
             PlayerUID = player.PlayerUID,
             LastKnownPlayername = player.PlayerName,
-            LastJoinDate = DateTime.UtcNow.ToString("MM/dd/yyyy HH:mm")
+            LastJoinDate = DateTime.Now.ToString("MM/dd/yyyy HH:mm")
         };
 
         string json = JsonSerializer.Serialize(payload);
@@ -70,7 +70,7 @@ public class PlayerEvents : ModSystem
         var payload = new
         {
             uid = player.PlayerUID,
-            leftAt = DateTime.UtcNow.ToString("MM/dd/yyyy HH:mm")
+            leftAt = DateTime.Now.ToString("MM/dd/yyyy HH:mm")
         };
 
         string json = JsonSerializer.Serialize(payload);

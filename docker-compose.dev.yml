@@ -76,7 +76,7 @@ services:
     environment:
       SERVER_BRANCH: "stable"
       SERVER_VERSION: "1.21.5"
-
+      TZ: "Europe/Berlin"
       SERVER_NAME: "Vintage Fun"
       SERVER_DESCRIPTION: "Vintage Story Server"
       SERVER_PORT: "42420"
