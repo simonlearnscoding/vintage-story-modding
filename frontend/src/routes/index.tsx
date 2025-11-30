@@ -44,7 +44,7 @@ function VintageLogDashboard() {
   const {
     isLoading: isLoadingPlayers,
     error: errorPlayers,
-    data: playerss = [],
+    data: players = [],
   } = useQuery({
     queryKey: ["players"],
     queryFn: async () => {
@@ -58,7 +58,6 @@ function VintageLogDashboard() {
     refetchInterval: 30000, // Refetch every 30 seconds
   });
 
-  console.log(playerss);
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gray-50 py-8">
@@ -83,37 +82,6 @@ function VintageLogDashboard() {
       </div>
     );
   }
-
-  const players: Player[] = [
-    {
-      uid: "player-1",
-      name: "Simon",
-      onlineSince: "2025-01-15T10:30:00Z",
-      lastOnline: null,
-      isOnline: true,
-    },
-    {
-      uid: "player-2",
-      name: "John",
-      onlineSince: null,
-      lastOnline: "2025-01-14T22:15:00Z",
-      isOnline: false,
-    },
-    {
-      uid: "player-3",
-      name: "Jane",
-      onlineSince: "2025-01-15T09:45:00Z",
-      lastOnline: null,
-      isOnline: true,
-    },
-    {
-      uid: "player-4",
-      name: "Bob",
-      onlineSince: null,
-      lastOnline: "2025-01-13T18:30:00Z",
-      isOnline: false,
-    },
-  ];
 
   return (
     <div className="h-screen flex  flex-col gap-4 bg-base-100 lg:px-10 px-4 pt-12 pb-4">
