@@ -1,5 +1,5 @@
 from sqlalchemy import select
-from app.models.database import Player, UserLog
+from app.models.database import Player, UserLog, DeathInfo
 from app.models.database_connection import Session
 from typing import List, Dict
 from datetime import datetime
@@ -26,6 +26,16 @@ class PlayerService:
             session.commit()
             session.refresh(new_player)
             return new_player
+
+    @staticmethod
+    def create_death_info(uid: str, damage_source: str, death_time: str) -> DeathInfo:
+        with Session() as session:
+            # Create new deathinfo
+            new_death_info = DeathInfo(uid=uid, damageSource=damage_source, deathTime=death_time)
+            session.add(new_death_info)
+            session.commit()
+            session.refresh(new_death_info)
+            return new_death_info
 
     @staticmethod
     def get_player(uid: str) -> Player | None:

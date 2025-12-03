@@ -12,9 +12,8 @@ class PlayerJoinRequest(BaseModel):
     LastJoinDate: str
 
 class PlayerLeaveRequest(BaseModel):
-    uid: str
+    PlayerUID: str
     leftAt: str
-
 
 class PlayerResponse(BaseModel):
     uid: str
@@ -22,7 +21,6 @@ class PlayerResponse(BaseModel):
 
     class Config:
         from_attributes = True
-
 
 class UserLogCreate(BaseModel):
     uid: str
@@ -45,3 +43,8 @@ class PlayerDetailsResponse(BaseModel):
     isOnline: bool
     onlineSince: Optional[str] = None
     lastOnline: Optional[str] = None
+
+class PlayerDeathInfo(BaseModel):
+    PlayerUID: str
+    damageSource: str
+    deathTime:str

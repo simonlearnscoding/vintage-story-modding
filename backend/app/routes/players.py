@@ -6,6 +6,7 @@ from app.models.schemas import (
     PlayerJoinRequest,
     PlayerLeaveRequest,
     PlayerDetailsResponse,
+    PlayerDeathInfo,
 )
 from app.services.player_service import PlayerService
 
@@ -87,13 +88,22 @@ async def join_player(join_request: PlayerJoinRequest):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+@router.post("/death")
+async def death_player(join_request: PlayerDeathInfo):
+    try:
+        death_info = PlayerService.create_death_info(
+            join_request.PlayerUID, join_request.damageSource, join_request.deathTime
+        )
+        return {"message": "Death recorded successfully", "id": death_info.id}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 @router.post("/leave")
 async def leave_player(leave_request: PlayerLeaveRequest):
     try:
         # Update existing log with leave time
         updated_log = PlayerService.update_user_log_with_leave_time(
-            leave_request.uid, leave_request.leftAt
+            leave_request.PlayerUID, leave_request.leftAt
         )
 
         if not updated_log:
