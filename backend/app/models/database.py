@@ -8,6 +8,7 @@ class Player(Base):
     __tablename__ = "players"
     uid = Column(String, primary_key=True)
     name = Column(String, nullable=False)
+    lives = Column(Integer, nullable=False)
 
 class UserLog(Base):
     __tablename__ = "userlog"

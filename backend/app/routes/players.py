@@ -16,7 +16,7 @@ router = APIRouter(prefix="/players", tags=["players"])
 @router.post("/", response_model=PlayerResponse)
 async def create_player(player: PlayerCreate):
     try:
-        created_player = PlayerService.create_player(player.uid, player.name)
+        created_player = PlayerService.create_player(player.uid, player.name, lives=20)
         return created_player
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -78,7 +78,7 @@ async def join_player(join_request: PlayerJoinRequest):
     try:
         # Upsert player
         player = PlayerService.create_player(
-            join_request.PlayerUID, join_request.LastKnownPlayername
+            join_request.PlayerUID, join_request.LastKnownPlayername, join_request.PlayerLives
         )
 
         # Create user log
@@ -94,6 +94,7 @@ async def death_player(join_request: PlayerDeathInfo):
         death_info = PlayerService.create_death_info(
             join_request.PlayerUID, join_request.damageSource, join_request.deathTime
         )
+        PlayerService.update_lives(join_request.PlayerUID, join_request.PlayerLives)
         return {"message": "Death recorded successfully", "id": death_info.id}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

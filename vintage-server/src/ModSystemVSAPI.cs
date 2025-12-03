@@ -54,6 +54,7 @@ public class PlayerEvents : ModSystem
             // ReSharper disable once RedundantAnonymousTypePropertyName
             PlayerUID = player.PlayerUID,
             LastKnownPlayername = player.PlayerName,
+            PlayerLives = (Maxdeaths - player.WorldData.Deaths),
             LastJoinDate = DateTime.Now.ToString("MM/dd/yyyy HH:mm")
         };
 
@@ -90,6 +91,7 @@ public class PlayerEvents : ModSystem
             // ReSharper disable once RedundantAnonymousTypePropertyName
             PlayerUID = player.PlayerUID,
             damageSource = causeEntityName,
+            PlayerLives = (Maxdeaths - player.WorldData.Deaths),
             deathTime = DateTime.Now.ToString("MM/dd/yyyy HH:mm")
         };
         string json = JsonSerializer.Serialize(payload);

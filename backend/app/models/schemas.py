@@ -8,6 +8,7 @@ class PlayerCreate(BaseModel):
 
 class PlayerJoinRequest(BaseModel):
     PlayerUID: str
+    PlayerLives: int
     LastKnownPlayername: str
     LastJoinDate: str
 
@@ -18,6 +19,7 @@ class PlayerLeaveRequest(BaseModel):
 class PlayerResponse(BaseModel):
     uid: str
     name: str
+    lives: int
 
     class Config:
         from_attributes = True
@@ -47,4 +49,5 @@ class PlayerDetailsResponse(BaseModel):
 class PlayerDeathInfo(BaseModel):
     PlayerUID: str
     damageSource: str
+    PlayerLives: int
     deathTime:str
