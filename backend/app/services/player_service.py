@@ -103,6 +103,7 @@ class PlayerService:
                     {
                         "name": player.name,
                         "uid": player.uid,
+                        "lives": player.lives,
                         "isOnline": is_online,
                         "onlineSince": online_since,
                         "lastOnline": last_online,

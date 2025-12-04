@@ -43,6 +43,7 @@ class PlayerDetailsResponse(BaseModel):
     name: str
     uid: str
     isOnline: bool
+    lives: int
     onlineSince: Optional[str] = None
     lastOnline: Optional[str] = None
 
