@@ -59,3 +59,6 @@ frontend/.env
 /vintage-server/data/
 /vintage-server/src/net8.0/
 /vintage-server/src/obj/
+vintage-server/src/.vs/VSAPI/v18/.suo
+/vintage-server/src/.vs/
+backend/backend.iml

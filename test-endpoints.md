@@ -35,18 +35,8 @@ curl -X POST "http://localhost:8000/players/join" \
   -H "Content-Type: application/json" \
   -d '{
     "PlayerUID": "AYnENYK0ecf2f2vPgDlXgP3U",
-    "RoleCode": "suplayer",
-    "PermaPrivileges": [],
-    "DeniedPrivileges": [],
-    "PlayerGroupMemberShips": {},
-    "AllowInvite": true,
-    "LastKnownPlayername": "GGGGGGG",
-    "CustomPlayerData": {},
-    "ExtraLandClaimAllowance": 0,
-    "ExtraLandClaimAreas": 0,
-    "FirstJoinDate": "11/25/2025 21:10",
-    "LastJoinDate": "11/25/2025 21:41",
-    "LastCharacterSelectionDate": "11/25/2025 21:13"
+    "LastKnownPlayername": "Rasquotcho",
+    "LastJoinDate": "11/25/2025 22:00"
   }'
 ```
 

@@ -1,5 +1,5 @@
 from sqlalchemy import select
-from app.models.database import Player, UserLog
+from app.models.database import Player, UserLog, DeathInfo
 from app.models.database_connection import Session
 from typing import List, Dict
 from datetime import datetime
@@ -7,25 +7,34 @@ from datetime import datetime
 
 class PlayerService:
     @staticmethod
-    def create_player(uid: str, name: str) -> Player:
+    def create_player(uid: str, name: str, lives: int) -> Player:
         with Session() as session:
-            # Check if player already exists
-            existing = session.execute(
+            # Merge updates and creates autmatically so we dont need any checks
+            player = session.merge(Player(uid=uid, name=name, lives=lives))
+            session.commit()
+            session.refresh(player)
+            return player
+
+
+    @staticmethod
+    def update_lives(uid: str, lives: int) -> None:
+        with Session() as session:
+            player = session.execute(
                 select(Player).where(Player.uid == uid)
             ).scalar_one_or_none()
 
-            if existing:
-                # Update name if changed
-                if existing.name != name:
-                    existing.name = name
-                return existing
-
-            # Create new player
-            new_player = Player(uid=uid, name=name)
-            session.add(new_player)
+            player.lives = lives
             session.commit()
-            session.refresh(new_player)
-            return new_player
+
+    @staticmethod
+    def create_death_info(uid: str, damage_source: str, death_time: str) -> DeathInfo:
+        with Session() as session:
+            # Create new deathinfo
+            new_death_info = DeathInfo(uid=uid, damageSource=damage_source, deathTime=death_time)
+            session.add(new_death_info)
+            session.commit()
+            session.refresh(new_death_info)
+            return new_death_info
 
     @staticmethod
     def get_player(uid: str) -> Player | None:
@@ -94,6 +103,7 @@ class PlayerService:
                     {
                         "name": player.name,
                         "uid": player.uid,
+                        "lives": player.lives,
                         "isOnline": is_online,
                         "onlineSince": online_since,
                         "lastOnline": last_online,

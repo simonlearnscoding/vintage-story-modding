@@ -10,14 +10,17 @@
 
   <ItemGroup>
     <Reference Include="VintagestoryAPI">
-      <HintPath>C:\Users\Pascal\AppData\Roaming\Vintagestory\VintagestoryAPI.dll</HintPath>
+      <HintPath>C:\Users\stp34852\AppData\Roaming\Vintagestory\VintagestoryAPI.dll</HintPath>
     </Reference>
     <Reference Include="VintagestoryLib">
-      <HintPath>C:\Users\Pascal\AppData\Roaming\Vintagestory\VintagestoryLib.dll</HintPath>
+      <HintPath>C:\Users\stp34852\AppData\Roaming\Vintagestory\VintagestoryLib.dll</HintPath>
     </Reference>
   </ItemGroup>
 
   <PropertyGroup>
     <OutputPath>./</OutputPath>
   </PropertyGroup>
+  <Target Name="PostBuild" AfterTargets="Build">
+    <Exec Command="powershell -Command Copy-Item -Path &quot;C:\Users\stp34852\Documents\vintage-story-modding\vintage-server\src\net8.0\VSAPI.dll&quot; -Destination &quot;C:\Users\stp34852\Documents\vintage-story-modding\vintage-server\data\Mods\VSAPI\VSAPI.dll&quot;" />
+  </Target>
 </Project>
